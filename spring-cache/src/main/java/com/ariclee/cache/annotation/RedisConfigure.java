@@ -1,6 +1,9 @@
 package com.ariclee.cache.annotation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import redis.clients.jedis.JedisPoolConfig;
 
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +28,11 @@ public class RedisConfigure {
 
     @Bean
     public RedisTemplate redisTemplate() {
-        RedisTemplate temp = new RedisTemplate();
+        RedisTemplate<Object, Object> temp = new RedisTemplate<>();
         temp.setConnectionFactory(this.jedisConnectionFactory());
+        RedisSerializer<Object> serializer = new GenericToStringSerializer<>(Object.class);
+        temp.setKeySerializer(serializer);
+        temp.setValueSerializer(new JdkSerializationRedisSerializer());
         return temp;
     }
 }

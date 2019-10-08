@@ -1,7 +1,10 @@
 package com.ariclee.cache.annotation;
 
 import com.ariclee.cache.Book;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -18,12 +21,12 @@ public class AnnotationBookService {
         respository.put("2", new Book("EfficetiveJava"));
     }
 
-    @Cacheable(value = "books")
+    @Cacheable(value = "books", key = "#id", unless = "#result == null")
     public Book findBook(String id) {
         return respository.get(id);
     }
 
-    // 不缓存返回实体中包含 default 字样的（使用 condition 实现）
+    // 只缓存参数名中包含 Java 的（使用 condition 实现）
     @Cacheable(value = "books", condition = "#name.contains('Java')")
     public Book findBookByName(String name) {
         Set<Map.Entry<String, Book>> entries = respository.entrySet();
@@ -32,6 +35,19 @@ public class AnnotationBookService {
                 return entry.getValue();
             }
         }
+        return new Book();
+    }
+
+    @Caching(
+            cacheable = {
+                    @Cacheable(value = "books", key = "#name")
+            },
+            put = {
+                    @CachePut(value = "books", key = "#result.id", condition = "#result != null"),
+                    @CachePut(value = "books", key = "#result.name", condition = "#result != null")
+            }
+    )
+    public Book findBookByName1(String name) {
         return new Book();
     }
 
@@ -47,7 +63,44 @@ public class AnnotationBookService {
 //        return new Book();
 //    }
 
-    public String saveBook(String id) {
-        return "default annotation book name";
+    @CachePut(value = "books", key = "#book.id")
+    public Book saveBook(Book book) {
+        respository.put(book.getId(), book);
+        return book;
+    }
+
+    // 当参数值为 10 时，才写入缓存
+    @CachePut(value = "books", key = "#book.id", condition = "#book.id == 10")
+    public Book saveBook1(Book book) {
+        respository.put(book.getId(), book);
+        return book;
+    }
+
+    // 当参数值为 10 时，才不写入缓存
+    @CachePut(value = "books", key = "#book.id", unless = "#book.id == 10")
+    public Book saveBook2(Book book) {
+        respository.put(book.getId(), book);
+        return book;
+    }
+
+    @Caching(
+            put = {
+                    @CachePut(value = "books", key = "#book.id"),
+                    @CachePut(value = "books", key = "#book.name"),
+            }
+    )
+    public Book saveBook3(Book book) {
+        respository.put(book.getId(), book);
+        return book;
+    }
+
+    @CacheEvict(value = "books", key = "id", allEntries = false)
+    public void delete(String id) {
+        respository.remove(id);
+    }
+
+    @CacheEvict(value = "books", allEntries = true)
+    public void deleteAll() {
+        respository.clear();
     }
 }

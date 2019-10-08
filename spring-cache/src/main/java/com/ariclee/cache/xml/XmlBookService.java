@@ -29,11 +29,24 @@ public class XmlBookService {
         return new Book();
     }
 
-    public String loadBooks() {
-        return "reload books success";
+    public void saveBook(Book book) {
+        respository.put(book.getId(), book);
     }
 
-    public String saveBook(String id) {
-        return "default book name";
+    public Book saveAndAddAllCacheMapping(Book book) {
+        respository.put(book.getId(), book);
+        return book;
+    }
+
+    public void delete(String id) {
+        respository.remove(id);
+    }
+
+    public void deleteAll() {
+        respository.clear();
+    }
+
+    public String keyGeneratorTest(Book book) {
+        return "success";
     }
 }
