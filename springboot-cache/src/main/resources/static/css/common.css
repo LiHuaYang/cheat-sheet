@@ -1,0 +1,18 @@
+
+
+/* 台式机 和 笔记本 ----------- */
+@media only screen and (min-width : 1224px) {
+    body {
+        width: 50%;
+        margin: 0 auto;
+    }
+}
+
+/* 大屏幕 ----------- */
+@media only screen and (min-width : 1824px) {
+    body {
+        width: 50%;
+        margin: 0 auto;
+    }
+}
+

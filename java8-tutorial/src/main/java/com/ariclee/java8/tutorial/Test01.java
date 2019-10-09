@@ -1,4 +1,4 @@
-package com.ariclee.test;
+package com.ariclee.java8.tutorial;
 
 import java.util.*;
 

@@ -1,0 +1,15 @@
+server:
+  port: 8087
+
+spring:
+  cache:
+    cache-names: books
+    type: redis
+    redis:
+      use-key-prefix: true
+  redis:
+    host: 172.17.1.32
+    port: 6379
+    password: 2940184
+    timeout: 2000s
+    database: 1
