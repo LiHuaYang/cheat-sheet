@@ -75,7 +75,7 @@
         <aop:advisor advice-ref="cacheAdvice" pointcut="execution(* com.ariclee.cache.xml.XmlBookService.*(..))"/>
     </aop:config>
 
-     <!--注册缓存管理（JVM）-->
+    <!-- ConcurrentMap 缓存管理器配置开始 -->
     <!--<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">-->
         <!--<property name="caches">-->
             <!--<set>-->
@@ -88,47 +88,54 @@
     <!--<bean id="cacheManager" class="org.springframework.cache.concurrent.ConcurrentMapCacheManager">-->
         <!--<constructor-arg value="books"/>-->
     <!--</bean>-->
+    <!-- ConcurrentMap 缓存管理器配置结束 -->
 
-     <!--注册缓存管理（Redis）-->
-    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-        <property name="hostName" value="172.17.1.32"/>
-        <property name="port" value="6379"/>
-        <property name="password" value="2940184"/>
-        <property name="timeout" value="2000"/>
-        <property name="database" value="1"/>
+
+    <!-- Redis 缓存管理器配置开始 -->
+    <!--<bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">-->
+        <!--<property name="hostName" value="172.17.1.32"/>-->
+        <!--<property name="port" value="6379"/>-->
+        <!--<property name="password" value="2940184"/>-->
+        <!--<property name="timeout" value="2000"/>-->
+        <!--<property name="database" value="1"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="genericToStringSerializer" class="org.springframework.data.redis.serializer.GenericToStringSerializer">-->
+        <!--<constructor-arg type="java.lang.Class" value="java.lang.Object"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate ">-->
+        <!--<property name="connectionFactory" ref="connectionFactory" />-->
+        <!--<property name="defaultSerializer" ref="genericToStringSerializer"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">-->
+        <!--<constructor-arg ref="redisTemplate" />-->
+        <!--&lt;!&ndash;-->
+        <!--当需要设置缓存的过期时间时-->
+        <!--不能在构造器中指定缓存名字-->
+        <!--否则过期时间无法生效-->
+        <!--&ndash;&gt;-->
+        <!--&lt;!&ndash;<constructor-arg value="books" />&ndash;&gt;-->
+        <!--<property name="defaultExpiration" value="20"/>-->
+        <!--<property name="expires">-->
+            <!--<map>-->
+                <!--<entry key="books" value="10000"/>-->
+            <!--</map>-->
+        <!--</property>-->
+        <!--<property name="usePrefix" value="true"/>-->
+    <!--</bean>-->
+    <!-- Redis 缓存管理器配置结束 -->
+
+    <!-- EhCache 缓存管理器配置开始 -->
+    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
     </bean>
 
-     <!-- 注入泛型类 -->
-    <bean id="genericToStringSerializer" class="org.springframework.data.redis.serializer.GenericToStringSerializer">
-        <constructor-arg type="java.lang.Class" value="java.lang.Object"/>
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcache"/>
     </bean>
-
-    <!-- 声明 RedisTemplate 类-->
-    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate ">
-        <property name="connectionFactory" ref="connectionFactory" />
-        <property name="defaultSerializer" ref="genericToStringSerializer"/>
-    </bean>
-
-    <!-- 声明缓存管理类 -->
-    <!-- 并与 redisTemplate 和缓存名字关联 -->
-    <bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
-        <constructor-arg ref="redisTemplate" />
-        <!--
-        当需要设置缓存的过期时间时
-        不能在构造器中指定缓存名字
-        否则过期时间无法生效
-        -->
-        <!--<constructor-arg value="books" />-->
-        <property name="defaultExpiration" value="20"/>
-        <property name="expires">
-            <map>
-                <entry key="books" value="10000"/>
-            </map>
-        </property>
-        <property name="usePrefix" value="true"/>
-    </bean>
-
-
+    <!-- EhCache 缓存管理器配置结束 -->
     <!-- MVC 扫包配置 -->
     <mvc:annotation-driven/>
 
