@@ -11,7 +11,8 @@ public class LogBackTest {
 
     public static void main(String[] args) {
         Logger logger = LoggerFactory.getLogger(LogBackTest.class);
-        logger.debug("debug,debug");
-        logger.info("info,info");
+        logger.debug("logback debug");
+        logger.info("logback info");
+        logger.error("logback error");
     }
 }
