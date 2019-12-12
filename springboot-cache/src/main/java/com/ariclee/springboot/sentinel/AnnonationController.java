@@ -1,4 +1,4 @@
-package com.ariclee.springboot.cache;
+package com.ariclee.springboot.sentinel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

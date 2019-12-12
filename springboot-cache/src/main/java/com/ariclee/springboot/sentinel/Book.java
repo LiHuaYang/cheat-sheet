@@ -1,4 +1,4 @@
-package com.ariclee.springboot.cache;
+package com.ariclee.springboot.sentinel;
 
 import java.io.Serializable;
 

@@ -165,7 +165,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.ariclee.springboot.cache.Application</mainClass>
+                    <mainClass>com.ariclee.springboot.sentinel.Application</mainClass>
                 </configuration>
 			</plugin>
 		</plugins>

@@ -1,4 +1,4 @@
-package com.ariclee.springboot.cache;
+package com.ariclee.springboot.sentinel;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
