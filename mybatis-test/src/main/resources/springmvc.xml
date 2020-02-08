@@ -10,25 +10,28 @@
 						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 	        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <context:annotation-config/>
+    <context:component-scan base-package="com.ariclee.mybatis.*"/>
 
-    <!-- 配置Handler -->
-    <!--<bean id="testController" name="/test.action" class="TestController"/>-->
+    <!-- 默认的数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" >
+        <property name="url" value="jdbc:mysql://172.18.12.64:3306/spms?useSSL=false"/>
+        <property name="username" value="rhf"/>
+        <property name="password" value="rhf"/>
+    </bean>
 
-    <!--
-        处理器映射器
-        将 bean 的 name 作为 url 进行查找，需要在配置 Handler 时指定 beanname (就是 url)
-    -->
-    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config-with-datasource.xml"/>
+        <property name="mapperLocations" value="classpath:mapper/*"/>
+    </bean>
 
-    <!-- 处理器适配器 -->
-    <!--<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ariclee.mybatis.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
 
-    <!-- 视图解析器 -->
-    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-        <!-- 配置jsp路径的前缀 -->
-        <!--<property name="prefix" value="/WEB-INF/jsp/"/>-->
-        <!-- 配置jsp路径的后缀 -->
-        <!--<property name="suffix" value=".jsp"/>-->
+    <!--<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+        <!--<property name="dataSource" ref="dataSource"/>-->
     <!--</bean>-->
-
 </beans>

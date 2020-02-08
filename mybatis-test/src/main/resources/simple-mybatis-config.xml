@@ -7,16 +7,23 @@
         <environment id="development">
             <transactionManager type="jdbc"/>
             <dataSource type="POOLED">
-                <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
-                <property name="url" value="jdbc:oracle:thin:@10.60.45.207:1521:dbtest"/>
-                <property name="username" value="rhf_nvi"/>
-                <property name="password" value="rhf_nvi"/>
+
+                <!-- mysql -->
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://172.18.12.64:3306/spms?useSSL=false"/>
+
+                <!-- oracle -->
+                <!--<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>-->
+                <!--<property name="url" value="jdbc:oracle:thin:@10.60.45.207:1521:dbtest"/>-->
+
+                <property name="username" value="rhf"/>
+                <property name="password" value="rhf"/>
             </dataSource>
         </environment>
     </environments>
 
     <mappers>
         <!--userMapper.xml装载进来  同等于把“dao”的实现装载进来 -->
-        <mapper resource="mapper/NviRecordMapper.xml"/>
+        <mapper resource="./mapper/OrgInfoMapper.xml"/>
     </mappers>
 </configuration>
