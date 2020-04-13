@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ariclee.mybatis.org.mapper.OrgInfoMapper">
+
+    <resultMap id="OrgInfoMap" type="com.ariclee.mybatis.org.OrgInfoPo">
+        <id column="id" property="id" />
+        <result column="org_name" property="orgName"/>
+        <result column="org_code" property="orgCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="scene" property="scene" javaType="com.ariclee.mybatis.org.SceneEnum" typeHandler="com.ariclee.mybatis.org.EnumValueTypeHandler"/>
+    </resultMap>
+
+    <select id="getBy" databaseId="mysql"
+            parameterType="com.ariclee.mybatis.org.QueryOrgInfoReq"
+            resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1 and id=#{id}
+    </select>
+
+    <select id="getBy" databaseId="oracle"
+            parameterType="com.ariclee.mybatis.org.QueryOrgInfoReq"
+            resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1 and id=#{id}
+    </select>
+
+    <insert id="insert1" parameterType="com.ariclee.mybatis.org.OrgInfoPo">
+        insert into org_info_test (id, org_code, org_name, create_time)
+        values(#{id}, #{orgCode}, #{orgName}, #{createTime})
+    </insert>
+
+    <insert id="insert2" parameterType="com.ariclee.mybatis.org.OrgInfoPo">
+        insert into org_info_test (id, org_code, org_name, create_time)
+        values(#{id}, #{orgCode}, #{orgName}, #{createTime})
+    </insert>
+
+    <update id="update1">
+        update org_info_test set org_name = #{orgName} where id=#{id}
+    </update>
+
+    <update id="update2">
+        update org_info_test set org_name = #{orgName} where id=#{id}
+    </update>
+
+    <insert id="insert3" parameterType="com.ariclee.mybatis.org.OrgInfoPo"
+    keyProperty="id" useGeneratedKeys="true">
+        insert into org_info_test (id, org_code, org_name, create_time)
+        values(#{id}, #{orgCode}, #{orgName}, #{createTime})
+    </insert>
+
+    <insert id="insert4" keyProperty="id"
+            useGeneratedKeys="true" databaseId="oracle">
+        <!--
+        keyProperty：查询出来的 id 对应的实体属性名
+        order：执行顺序
+        resultType：必须要指定
+        -->
+        <!--<selectKey keyProperty="id" order="BEFORE" resultType="integer">-->
+            <!--select t_org_info_test_seq.nextval from dual-->
+        <!--</selectKey>-->
+        <!--insert into org_info_test (id, org_code, org_name, create_time)-->
+        <!--values(#{id}, #{orgCode}, #{orgName}, #{createTime})-->
+
+        <selectKey keyProperty="id" order="AFTER" resultType="integer">
+        select t_org_info_test_seq.currval from dual
+        </selectKey>
+        insert into org_info_test (id, org_code, org_name, create_time)
+        values(t_org_info_test_seq.nextval, #{orgCode}, #{orgName}, #{createTime})
+    </insert>
+
+    <select id="selectList" databaseId="oracle" resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1
+    </select>
+
+    <select id="selectSingle" databaseId="oracle" resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1
+    </select>
+
+</mapper>

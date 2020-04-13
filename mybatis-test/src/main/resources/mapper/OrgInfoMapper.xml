@@ -1,16 +1,340 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ariclee.mybatis.mapper.OrgInfoMapper">
+<mapper namespace="com.ariclee.mybatis.org.mapper.OrgInfoMapper">
 
-    <resultMap id="OrgInfoMap" type="com.ariclee.mybatis.OrgInfoPo">
+    <cache />
+
+    <resultMap id="OrgInfoMap" type="com.ariclee.mybatis.org.OrgInfoPo">
         <id column="id" property="id" />
         <result column="org_name" property="orgName"/>
         <result column="org_code" property="orgCode"/>
         <result column="create_time" property="createTime"/>
-        <result column="scene" property="scene" javaType="com.ariclee.mybatis.SceneEnum" typeHandler="com.ariclee.mybatis.EnumValueTypeHandler"/>
+        <result column="scene" property="scene" javaType="com.ariclee.mybatis.org.SceneEnum" typeHandler="com.ariclee.mybatis.org.EnumValueTypeHandler"/>
     </resultMap>
 
-    <select id="getBy" parameterType="com.ariclee.mybatis.QueryOrgInfoReq" resultMap="OrgInfoMap">
+    <select id="getBy" databaseId="mysql"
+            parameterType="com.ariclee.mybatis.org.QueryOrgInfoReq"
+            resultType="com.ariclee.mybatis.org.OrgInfoPo">
         SELECT * FROM org_info_test where 1=1 and id=#{id}
     </select>
+
+    <select id="getBy" databaseId="oracle"
+            parameterType="com.ariclee.mybatis.org.QueryOrgInfoReq"
+            resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1 and id=#{id}
+    </select>
+
+    <insert id="insert1" parameterType="com.ariclee.mybatis.org.OrgInfoPo">
+        insert into org_info_test (id, org_code, org_name, create_time)
+        values(#{id}, #{orgCode}, #{orgName}, #{createTime})
+    </insert>
+
+    <insert id="insert2" parameterType="com.ariclee.mybatis.org.OrgInfoPo">
+        insert into org_info_test (id, org_code, org_name, create_time)
+        values(#{id}, #{orgCode}, #{orgName}, #{createTime})
+    </insert>
+
+    <update id="update1">
+        update org_info_test set org_name = #{orgName} where id=#{id}
+    </update>
+
+    <update id="update2">
+        update org_info_test set org_name = #{orgName} where id=#{id}
+    </update>
+
+    <insert id="insert3" parameterType="com.ariclee.mybatis.org.OrgInfoPo"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into org_info_test (id, org_code, org_name, create_time)
+        values(#{id}, #{orgCode}, #{orgName}, #{createTime})
+    </insert>
+
+    <insert id="insert4" keyProperty="id"
+            useGeneratedKeys="true" databaseId="oracle">
+        <!--
+        keyProperty：查询出来的 id 对应的实体属性名
+        order：执行顺序
+        resultType：必须要指定
+        -->
+        <!--<selectKey keyProperty="id" order="BEFORE" resultType="integer">-->
+        <!--select t_org_info_test_seq.nextval from dual-->
+        <!--</selectKey>-->
+        <!--insert into org_info_test (id, org_code, org_name, create_time)-->
+        <!--values(#{id}, #{orgCode}, #{orgName}, #{createTime})-->
+
+        <selectKey keyProperty="id" order="AFTER" resultType="integer">
+            select t_org_info_test_seq.currval from dual
+        </selectKey>
+        insert into org_info_test (id, org_code, org_name, create_time)
+        values(t_org_info_test_seq.nextval, #{orgCode}, #{orgName}, #{createTime})
+    </insert>
+
+    <select id="selectList" databaseId="oracle" resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1
+    </select>
+
+    <select id="selectSingle" databaseId="oracle" resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1
+    </select>
+
+    <resultMap id="OrgInfoMap1" type="com.ariclee.mybatis.org.OrgInfoPo">
+        <id column="id" property="id" />
+        <result column="org_name" property="orgName"/>
+        <result column="org_code" property="orgCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="scene" property="scene" javaType="com.ariclee.mybatis.org.SceneEnum" typeHandler="com.ariclee.mybatis.org.EnumValueTypeHandler"/>
+    </resultMap>
+
+    <!-- OrgInfoPo getBy2(Integer id, String orgCode) -->
+    <select id="getBy2"
+            resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1 and id=#{param1} and org_code=#{param2}
+    </select>
+
+    <!-- SELECT * FROM org_info_test where 1=1 and id=2 and org_code=? -->
+    <select id="getBy3" resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1 and id=${id} and org_code=#{orgCode}
+    </select>
+
+    <select id="getBy4" resultType="map">
+        SELECT * FROM org_info_test where 1=1 and id=#{id}
+    </select>
+
+    <select id="getBy5" resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1 and org_code like #{orgCode}
+    </select>
+
+
+    <!--<resultMap id="OrgInfoPoWithMchInfoMap1" type="com.ariclee.mybatis.org.OrgInfoPoWithMchInfo">-->
+        <!--<id property="id" column="id"/>-->
+        <!--<result column="mit_id" property="mch.id"/>-->
+        <!--<result column="mit_code" property="mch.code"/>-->
+        <!--<result column="mit_name" property="mch.name"/>-->
+    <!--</resultMap>-->
+
+    <resultMap id="OrgInfoPoWithMchInfoMap1" type="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        <id property="id" column="id"/>
+        <association property="mch" javaType="com.ariclee.mybatis.mch.MchInfoPO">
+            <result column="mit_id" property="id"/>
+            <result column="mit_code" property="code"/>
+            <result column="mit_name" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="getBy6" resultMap="OrgInfoPoWithMchInfoMap1">
+        SELECT
+               oit.id as id,
+               oit.org_code as org_code,
+               oit.org_name as org_name,
+               mit.id as mit_id,
+               mit.code as mit_code,
+               mit.name as mit_name
+        FROM org_info_test oit left join mch_info_test mit on oit.id=mit.org_id
+        where 1=1 and oit.id=#{id}
+    </select>
+
+    <resultMap id="OrgInfoPoWithMchInfoMap1_1" type="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        <id property="id" column="id"/>
+        <association property="mch"
+                     javaType="com.ariclee.mybatis.mch.MchInfoPO"
+                     select="getMchInfoByOrgId" column="id" fetchType="lazy">
+        </association>
+    </resultMap>
+
+    <select id="getBy6_1" resultMap="OrgInfoPoWithMchInfoMap1_1">
+        SELECT *
+        FROM org_info_test
+        where 1=1 and id=#{id}
+    </select>
+
+    <select id="getMchInfoByOrgId" resultType="com.ariclee.mybatis.mch.MchInfoPO">
+        SELECT *
+        FROM mch_info_test
+        where 1=1 and org_id=#{id}
+    </select>
+
+    <select id="getMchInfosByOrgId" resultType="com.ariclee.mybatis.mch.MchInfoPO">
+        SELECT *
+        FROM mch_info_test
+        where 1=1 and org_id=#{id}
+    </select>
+
+    <resultMap id="OrgInfoPoWithMchInfoMap2" type="com.ariclee.mybatis.org.OrgWithMchInfoPo2">
+        <id property="id" column="id"/>
+        <collection property="mchs" select="getMchInfosByOrgId" column="id" />
+    </resultMap>
+
+    <!--
+    如果不指定 id 标签，会查出多条，导致无法合并
+    -->
+    <!--<resultMap id="OrgInfoPoWithMchInfoMap2" type="com.ariclee.mybatis.org.OrgWithMchInfoPo2">-->
+        <!--<id property="id" column="id"/>-->
+            <!--<collection property="mchs" ofType="com.ariclee.mybatis.mch.MchInfoPO">-->
+            <!--<id column="mit_id" property="id"/>-->
+            <!--<result column="mit_code" property="code"/>-->
+            <!--<result column="mit_name" property="name"/>-->
+        <!--</collection>-->
+    <!--</resultMap>-->
+
+    <select id="getBy7" resultMap="OrgInfoPoWithMchInfoMap2">
+        SELECT *
+        FROM org_info_test
+        where 1=1 and oit.id=#{id}
+    </select>
+
+    <resultMap id="OrgInfoPoWithMchInfoMap3" type="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        <id property="id" column="id"/>
+        <discriminator javaType="integer" column="id">
+            <case value="1">
+                <association property="mch"
+                             javaType="com.ariclee.mybatis.mch.MchInfoPO"
+                             select="getMchInfoByOrgId" column="id" fetchType="lazy">
+                </association>
+            </case>
+            <case value="2">
+                <result property="orgName" column="org_name"/>
+            </case>
+        </discriminator>
+    </resultMap>
+
+    <select id="getBy8" resultMap="OrgInfoPoWithMchInfoMap3">
+        SELECT *
+        FROM org_info_test
+        where 1=1 and id=#{id}
+    </select>
+
+    <select id="getBy9" resultType="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        SELECT * FROM org_info_test WHERE
+        <if test="id!=null">
+            id=#{id}
+        </if>
+        <!-- 单引号可以起作用 -->
+       <!--<if test="orgCodeLike!=''">-->
+          <!--and org_code like #{orgCodeLike}-->
+        <!--</if>-->
+        <!-- 转义字符为什么不行？ -->
+        <!--<if test="orgCodeLike!= &quot; &quot;">-->
+            <!--and org_code like #{orgCodeLike}-->
+        <!--</if>-->
+    </select>
+
+    <select id="getBy10" resultType="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        SELECT * FROM org_info_test WHERE 1=1
+#         and id=${@com.ariclee.mybatis.contants.TestConstants@ONE}
+        and id in ${@com.ariclee.mybatis.contants.TestConstants@SUCCESS_STATES}
+    </select>
+
+    <select id="getBy11" resultType="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        SELECT * FROM org_info_test
+        <!--<where>-->
+        <!--<if test="orgCodeLike!=''">-->
+        <!--and org_code like #{orgCodeLike}-->
+        <!--</if>-->
+        <!--</where>-->
+
+        <trim prefix="where" prefixOverrides="" suffix="" suffixOverrides="and">
+            <if test="orgCodeLike!=''">
+                org_code like #{orgCodeLike} and
+            </if>
+        </trim>
+    </select>
+
+    <select id="getBy12" resultType="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        SELECT * FROM org_info_test
+        <where>
+            <choose>
+                <when test="orgCodeLike!=''">
+                    and org_code like #{orgCodeLike}
+                </when>
+                <when test="id != null">
+                    id=#{id}
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <update id="update3">
+        <!--update org_info_test set-->
+        <!--<if test="orgCode != ''">-->
+            <!--org_code=#{orgCode},-->
+        <!--</if>-->
+        <!--<if test="orgName != ''">-->
+            <!--org_name=#{orgName},-->
+        <!--</if>-->
+        <!--<if test="createTime != null">-->
+            <!--create_time=#{createTime},-->
+        <!--</if>-->
+        <!--where id=#{id}-->
+
+        update org_info_test
+        <set>
+            <if test="orgCode != ''">
+                org_code=#{orgCode},
+            </if>
+            <if test="orgName != ''">
+                org_name=#{orgName},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="batchDelete1">
+        delete from org_info_test where id in
+        <foreach collection="ids" separator="," item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchAdd1">
+        insert into org_info_test(org_code, org_name, create_time) values
+        <foreach collection="pos" item="po" separator=",">
+            (#{po.orgCode}, #{po.orgName}, #{po.createTime})
+        </foreach>
+
+        <!--mysql allowmultiqueries-->
+
+        <!--<foreach collection="pos" item="po" separator=";">-->
+            <!--insert into org_info_test(org_code, org_name, create_time) values-->
+            <!--(#{po.orgCode}, #{po.orgName}, #{po.createTime})-->
+        <!--</foreach>-->
+    </insert>
+
+    <insert id="batchAdd2">
+        begin
+          <foreach collection="pos" item="po">
+                insert into org_info_test (id, org_code, org_name, create_time)
+                values(t_org_info_test_seq.nextval, #{po.orgCode}, #{po.orgName}, #{po.createTime});
+          </foreach>
+        end;
+    </insert>
+
+    <select id="getBy13" resultType="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        SELECT * FROM org_info_test where 1=1
+        <if test="_parameter != null">
+            and id=#{id}
+        </if>
+    </select>
+
+    <select id="getBy14" resultType="com.ariclee.mybatis.org.OrgWithMchInfoPo">
+        <bind name="_orgCodeLike" value="'%'+orgCodeLike+'%'" />
+        SELECT * FROM org_info_test where 1=1
+          and org_code like #{_orgCodeLike}
+    </select>
+
+    <select id="getBy15" resultType="com.ariclee.mybatis.org.OrgWithMchInfoPo" >
+        <bind name="_orgCodeLike" value="'%'+orgCodeLike+'%'" />
+        SELECT * FROM org_info_test where 1=1
+        and org_code like #{_orgCodeLike}
+    </select>
+
+    <select id="getBy16" resultType="com.ariclee.mybatis.org.OrgWithMchInfoPo" >
+        SELECT * FROM org_info_test where 1=1
+    </select>
+
+    <insert id="insertWithEnum">
+        insert into org_info_test (org_code, org_name, create_time, scene)
+        values(#{orgCode}, #{orgName}, #{createTime}, #{scene});
+    </insert>
 </mapper>

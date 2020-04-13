@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ariclee.mybatis.org.mapper.OrgInfoMapper">
+
+    <resultMap id="OrgInfoMap" type="com.ariclee.mybatis.org.OrgInfoPo">
+        <id column="id" property="id" />
+        <result column="org_name" property="orgName"/>
+        <result column="org_code" property="orgCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="scene" property="scene" javaType="com.ariclee.mybatis.org.SceneEnum" typeHandler="com.ariclee.mybatis.org.EnumValueTypeHandler"/>
+    </resultMap>
+
+    <select id="getBy"
+            parameterType="com.ariclee.mybatis.org.QueryOrgInfoReq"
+            resultType="com.ariclee.mybatis.org.OrgInfoPo">
+        SELECT * FROM org_info_test where 1=1 and id=#{id}
+    </select>
+</mapper>

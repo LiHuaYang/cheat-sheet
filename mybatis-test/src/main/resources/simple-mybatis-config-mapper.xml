@@ -2,14 +2,11 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-    <!-- ！！各个子标签是有顺序的！！ -->
-
-    <!--<properties resource="external.properties"/>-->
-
     <!-- setting -->
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="logImpl" value="LOG4J" />
+        <setting name="cacheEnabled" value="true"/>
     </settings>
 
     <!--
@@ -36,12 +33,12 @@
             <dataSource type="POOLED">
 
                 <!-- mysql -->
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://172.18.12.64:3306/spms?useSSL=false"/>
+                <!--<property name="driver" value="com.mysql.jdbc.Driver"/>-->
+                <!--<property name="url" value="jdbc:mysql://172.18.12.64:3306/spms?useSSL=false"/>-->
 
                 <!-- oracle -->
-                <!--<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>-->
-                <!--<property name="url" value="jdbc:oracle:thin:@10.60.45.207:1521:dbtest"/>-->
+                <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+                <property name="url" value="jdbc:oracle:thin:@10.60.45.207:1521:dbtest"/>
 
                 <property name="username" value="rhf"/>
                 <property name="password" value="rhf"/>
@@ -50,6 +47,13 @@
     </environments>
 
     <mappers>
+        <!--
+            - 有 xml 文件，文件名必须和接口同名，并且放在同一目录下
+            - 没有 xml 文件，使用注解方式实现
+        -->
+        <!--<mapper resource="./mapper/*.xml"/>-->
         <mapper resource="./mapper/OrgInfoMapper.xml"/>
+        <!--<mapper class="com.ariclee.mybatis.org.mapper.OrgInfoAnnotationMapper"/>-->
+        <!--<package name="com.ariclee.mybatis.org.mapper"/>-->
     </mappers>
 </configuration>

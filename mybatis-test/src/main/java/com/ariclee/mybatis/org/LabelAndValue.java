@@ -1,4 +1,4 @@
-package com.ariclee.mybatis;
+package com.ariclee.mybatis.org;
 
 import java.io.Serializable;
 

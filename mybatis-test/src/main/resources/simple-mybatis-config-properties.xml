@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <properties resource="external.properties">
+        <!--<property name="username" value="dev_user"/>-->
+        <!--<property name="password" value="F2Fa3!33TYyg"/>-->
+    </properties>
+
+    <!--<typeAliases>-->
+        <!--<package name="com.ariclee.mybatis.mapper"/>-->
+    <!--</typeAliases>-->
+
+    <settings>
+        <setting name="logImpl" value="LOG4J" />
+    </settings>
+
+    <!--数据源配置  这块用 mysql数据库 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="jdbc"/>
+            <dataSource type="POOLED">
+
+                <!-- mysql -->
+                <property name="driver" value="${db.driver}"/>
+                <property name="url" value="${db.url}"/>
+
+                <!-- oracle -->
+                <!--<property name="driver" value="oracle.jdbc.driver.OracleDriver"/>-->
+                <!--<property name="url" value="jdbc:oracle:thin:@10.60.45.207:1521:dbtest"/>-->
+
+                <property name="username" value="${db.username}"/>
+                <property name="password" value="${db.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!--同等于把“dao”的实现装载进来 -->
+        <mapper resource="./mapper/OrgInfoMapper.xml"/>
+    </mappers>
+</configuration>

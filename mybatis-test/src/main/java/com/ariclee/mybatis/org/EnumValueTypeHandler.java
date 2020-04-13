@@ -1,4 +1,4 @@
-package com.ariclee.mybatis;
+package com.ariclee.mybatis.org;
 
 
 import org.apache.ibatis.type.BaseTypeHandler;
@@ -34,7 +34,7 @@ public class EnumValueTypeHandler<E extends LabelAndValue> extends BaseTypeHandl
     public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType) throws SQLException {
         //获取非空的枚举的int值并设置到statement中
 //        ps.setInt(i, Integer.valueOf(parameter.getValue()));
-        ps.setString(i, parameter.getLabel());
+        ps.setString(i, parameter.getValue());
     }
 
     @Override

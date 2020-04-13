@@ -2,14 +2,11 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-    <!-- ！！各个子标签是有顺序的！！ -->
-
-    <!--<properties resource="external.properties"/>-->
-
     <!-- setting -->
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="logImpl" value="LOG4J" />
+        <setting name="cacheEnabled" value="true"/>
     </settings>
 
     <!--
@@ -20,11 +17,13 @@
         <!--<typeAlias type="com.ariclee.mybatis.org.OrgInfoPo" alias="ooo"/>-->
     <!--</typeAliases>-->
 
-    <!--<typeHandlers></typeHandlers>-->
+    <typeHandlers>
+        <typeHandler javaType="com.ariclee.mybatis.org.SceneEnum" handler="com.ariclee.mybatis.org.EnumValueTypeHandler"/>
+    </typeHandlers>
 
-    <!--<plugins>-->
-        <!--<plugin interceptor=""></plugin>-->
-    <!--</plugins>-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"/>
+    </plugins>
 
     <!--
         使用 default 属性指定使用什么环境的配置
@@ -50,6 +49,12 @@
     </environments>
 
     <mappers>
+        <!--
+            - 有 xml 文件，文件名必须和接口同名，并且放在同一目录下
+            - 没有 xml 文件，使用注解方式实现
+        -->
+        <!--<mapper resource="./mapper/*.xml"/>-->
         <mapper resource="./mapper/OrgInfoMapper.xml"/>
+        <!--<package name="com.ariclee.mybatis.org.mapper"/>-->
     </mappers>
 </configuration>

@@ -1,8 +1,9 @@
 package com.ariclee.mybatis.controller;
 
-import com.ariclee.mybatis.QueryOrgInfoReq;
-import com.ariclee.mybatis.mapper.OrgInfoMapper;
+import com.ariclee.mybatis.org.QueryOrgInfoReq;
+import com.ariclee.mybatis.org.mapper.OrgInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
